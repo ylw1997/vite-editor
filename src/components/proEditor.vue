@@ -1,9 +1,9 @@
 <!--
  * @Author: YangLiwei
  * @Date: 2022-07-18 15:15:38
- * @LastEditTime: 2022-09-30 11:48:47
+ * @LastEditTime: 2022-10-08 09:24:52
  * @LastEditors: yangliwei 1280426581@qq.com
- * @FilePath: \vite-npm\src\components\proEditor.vue
+ * @FilePath: \vite-editor\src\components\proEditor.vue
  * @Description: 
 -->
 <template>
@@ -78,7 +78,7 @@ const handleChange = (editor: any) => {
 
 const content = ref("");
 </script>
-<style lang="less">
+<style>
 .yeditor {
   border: 1px solid #ccc;
   height: calc(100% - 100px);
