@@ -1,7 +1,7 @@
 <!--
  * @Author: YangLiwei
  * @Date: 2022-07-18 15:15:38
- * @LastEditTime: 2022-10-08 09:24:52
+ * @LastEditTime: 2022-11-09 14:22:22
  * @LastEditors: yangliwei 1280426581@qq.com
  * @FilePath: \vite-editor\src\components\proEditor.vue
  * @Description: 
@@ -22,7 +22,7 @@ export default {
 <script setup lang="ts">
 import "@wangeditor/editor/dist/css/style.css";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue"; // 引入 css
-import { shallowRef, ref, watch, Prop } from 'vue';
+import { shallowRef, ref, watch, Prop, computed } from 'vue';
 import { AxiosResponse } from "axios";
 const editorRef = shallowRef();
 const props = defineProps({
@@ -34,7 +34,13 @@ const props = defineProps({
     type: Function,
     default: () => { },
   } as Prop<(file: File) => Promise<AxiosResponse<any, any>>>,
+  readonly: {
+    type: Boolean,
+    default: false
+  }
 });
+
+const content = ref("");
 
 // 自定义上传函数
 const customUpload = async (file: File, insertFn: any) => {
@@ -47,17 +53,20 @@ const customUpload = async (file: File, insertFn: any) => {
 };
 
 
-const editorConfig = {
-  placeholder: "请输入内容...",
-  MENU_CONF: {
-    uploadImage: {
-      customUpload
+const editorConfig = computed(() => {
+  return {
+    readOnly: props.readonly,
+    placeholder: "请输入内容...",
+    MENU_CONF: {
+      uploadImage: {
+        customUpload
+      },
+      uploadVideo: {
+        customUpload,
+      },
     },
-    uploadVideo: {
-      customUpload,
-    },
-  },
-};
+  };
+})
 
 
 const handleCreated = (editor: any) => {
@@ -67,6 +76,8 @@ const handleCreated = (editor: any) => {
 
 watch(props, (val) => {
   content.value = val.value;
+},{
+  immediate: true
 });
 
 const emits = defineEmits(["update:value"]);
@@ -76,7 +87,7 @@ const handleChange = (editor: any) => {
   emits("update:value", editor.getHtml());
 };
 
-const content = ref("");
+
 </script>
 <style>
 .yeditor {
